@@ -2,12 +2,12 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-empty-function */
 
-// const CoinAPI = require('../CoinAPI');
 const { MongoClient } = require('mongodb')
+const CoinAPI = require('../CoinAPI')
 
 class MongoBackend {
   constructor() {
-    // this.coinAPI = new CoinAPI();
+    this.coinAPI = new CoinAPI()
     this.mongoUrl = 'mongodb://localhost:37017/maxcooin'
     this.client = null
     this.collection = null
@@ -32,7 +32,21 @@ class MongoBackend {
     return false
   }
 
-  async insert() {}
+  async insert() {
+    const documents = []
+    const data = await this.coinAPI.fetch()
+    // console.log('data:', data)
+    
+    // Object.entries(data.bpi).forEach(entry => {
+    Object.entries(data.bpi).forEach(([date, value]) => {
+      documents.push({
+        date, // date: entry[0]
+        value, // value: entry[1]
+      })
+    })
+    
+    return this.collection.insertMany(documents)
+  }
 
   async getMax() {}
 
@@ -46,6 +60,12 @@ class MongoBackend {
       throw new Error('Connection to MongoDB failed!')
     }
     console.timeEnd('--- mongodb-connect')
+
+    console.info('--- Inserting into MongoDB')
+    console.time('mongodb-insert')
+    const insertResult = await this.insert()
+    console.timeEnd('mongodb-insert')
+    console.log(`--- Inserted ${insertResult.result.n} documents into MongoDB`)
 
     console.info('### Disconnection from MongoDB')
     console.time('--- mongodb-disconnect')
