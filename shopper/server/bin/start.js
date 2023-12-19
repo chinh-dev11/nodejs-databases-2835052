@@ -10,7 +10,8 @@ async function connectToMongoose() {
   return mongoose.connect(config.mongodb.url, {
     // useNewUrlParser: true, // [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
     // useUnifiedTopology: true, // [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
-    // useCreateIndex: true, // MongoParseError: option usecreateindex is not supported
+    // useCreateIndex: true, // MongoParseError: option usecreateindex is not supported,
+    // useFindAndModify: false // MongoParseError: option usefindandmodify is not supported
   })
 }
 /* Logic to start the application */
