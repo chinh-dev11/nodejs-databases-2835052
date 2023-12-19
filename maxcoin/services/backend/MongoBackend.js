@@ -72,7 +72,7 @@ class MongoBackend {
     console.info(`--- Inserted ${insertResult.result.n} documents into MongoDB`)
 
     // query
-    console.info('--- Querying MmongoDB')
+    console.info('--- Querying MongoDB')
     console.time('--- mongodb-find')
     const doc = await this.getMax()
     console.timeEnd('--- mongodb-find')
