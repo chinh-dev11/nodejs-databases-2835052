@@ -32,7 +32,7 @@ UserSchema.pre('save', function preSave(next) {
   return next();
 });
 
-// compare the provided hashed password with the one in the database
+// compare the provided password (plain text) with the one in the database (hashed)
 UserSchema.methods.comparePassword = async function comparePassword(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
