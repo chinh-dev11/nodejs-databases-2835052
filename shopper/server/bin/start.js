@@ -16,14 +16,14 @@ async function connectToMongoose() {
   })
 }
 
-function connectToRedis(){
+function connectToRedis() {
   const redis = new Redis(config.redis.port)
 
-  redis.on('connect',()=>{
+  redis.on('connect', () => {
     console.info('### Successfully connected to Redis')
   })
 
-  redis.on('error',(err)=>{
+  redis.on('error', (err) => {
     console.error(err)
     process.exit(1)
   })
