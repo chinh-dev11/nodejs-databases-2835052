@@ -4,6 +4,8 @@ const http = require('http')
 const mongoose = require('mongoose')
 const Redis = require('ioredis')
 
+const Sequelize = require('sequelize')
+
 const config = require('../config')
 const App = require('../app')
 
@@ -33,6 +35,24 @@ function connectToRedis() {
 
 const redis = connectToRedis()
 config.redis.client = redis
+
+function connectToMySQL() {
+  const sequelize = new Sequelize(config.mysql.options)
+  sequelize
+    .authenticate()
+    .then(() => {
+      console.log('Successfully connected to MySQL')
+    })
+    .catch((err) => {
+      console.error(err)
+      process.exit(1)
+    })
+
+  return sequelize
+}
+
+const mysql = connectToMySQL()
+config.mysql.client = mysql
 
 /* Logic to start the application */
 const app = App(config)
