@@ -5,10 +5,13 @@ const session = require('express-session') // default Express session module.
 
 // connect-redis v.7+: (session) causes TypeError
 /* const RedisStore = require('connect-redis')(session)
-TypeError: require(...) is not a function... */ 
+TypeError: require(...) is not a function... */
 const RedisStore = require('connect-redis')(session)
 
 const routeHandler = require('./routes')
+
+const UserService = require('./services/UserService')
+const BasketService = require('./services/BasketService')
 
 module.exports = (config) => {
   const app = express()
@@ -26,7 +29,7 @@ module.exports = (config) => {
   // In this Express default config, Express will use the application's memory to store information in there. This is fine during development but it has some major shortcomings.
   app.use(
     session({
-      store: new RedisStore({client: config.redis.client}), // the Redis client is created in /server/bin/start.js
+      store: new RedisStore({ client: config.redis.client }), // the Redis client is created in /server/bin/start.js
       secret: 'very secret secret to encyrpt session',
       resave: false,
       saveUninitialized: false,
@@ -51,6 +54,32 @@ module.exports = (config) => {
       req.session.messages = []
     }
     res.locals.messages = req.session.messages
+
+    if (req.session.userId) {
+      try {
+        res.locals.currentUser = await UserService.getOne(req.session.userId)
+        
+        const basket = new BasketService(
+          config.redis.client,
+          req.session.userId
+        )
+        
+        let basketCount = 0
+        
+        const basketContents = await basket.getAll()
+        
+        if (basketContents) {
+          Object.keys(basketContents).forEach((itemId) => {
+            basketCount += parseInt(basketContents[itemId], 10) // 10: the radix, the base of the numeric system for parseInt
+          })
+        }
+        
+        res.locals.basketCount = basketCount
+      } catch (err) {
+        return next(err)
+      }
+    }
+
     return next()
   })
 
