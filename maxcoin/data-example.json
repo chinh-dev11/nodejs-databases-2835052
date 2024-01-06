@@ -1,0 +1,17 @@
+// https://api.coindesk.com/v1/bpi/historical/close.json?start=2021-12-01&end=2021-12-07
+{
+    "bpi": {
+       "2021-12-01": 57238.6217,
+       "2021-12-02": 56522.1483,
+       "2021-12-03": 53671.99,
+       "2021-12-04": 49247.4233,
+       "2021-12-05": 49454.1033,
+       "2021-12-06": 50516.595,
+       "2021-12-07": 50631.1267
+    },
+    "disclaimer": "This data was produced from the CoinDesk Bitcoin Price Index. BPI value data returned as USD.",
+    "time": {
+       "updated": "Dec 8, 2021 00:03:00 UTC",
+       "updatedISO": "2021-12-08T00:03:00+00:00"
+    }
+ }

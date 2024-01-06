@@ -16,6 +16,7 @@ async function generateHash(password) {
   return bcrypt.hash(password, COST);
 }
 
+// hook: be executed before the document is saved. It's used to modify the data before it's saved.
 UserSchema.pre('save', function preSave(next) {
   const user = this;
 
@@ -31,6 +32,7 @@ UserSchema.pre('save', function preSave(next) {
   return next();
 });
 
+// compare the provided password (plain text) with the one in the database (hashed)
 UserSchema.methods.comparePassword = async function comparePassword(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
