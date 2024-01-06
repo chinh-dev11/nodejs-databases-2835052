@@ -66,9 +66,7 @@ module.exports = (config) => {
     return res.redirect('/basket')
   })
 
-  router.get('/buy', async (req, res, next) => {
-    return next('Not implemented')
-    /*
+  router.get('/buy', async (req, res) => {
     if (!res.locals.currentUser) {
       req.session.messages.push({
         type: "warning",
@@ -76,6 +74,7 @@ module.exports = (config) => {
       });
       return res.redirect("/shop");
     }
+
     try {
       const userId = res.locals.currentUser.id;
       const user = res.locals.currentUser;
@@ -129,7 +128,6 @@ module.exports = (config) => {
       console.error(err);
       return res.redirect("/basket");
     }
-    */
   })
 
   return router
